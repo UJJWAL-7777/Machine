@@ -1,4 +1,4 @@
-import { useState } from React;
+import { useState } from "react";
 import axios from "axios";
 
 function Register () {
@@ -9,7 +9,7 @@ function Register () {
     const handleRegister = async () => {
         try{
             await axios.post(
-                "http://localhost:500/api/auth/register",
+                "http://localhost:5000/api/auth/register",
                 {
                     name,
                     email,
@@ -37,3 +37,5 @@ function Register () {
 
 
 }
+
+export default Register;

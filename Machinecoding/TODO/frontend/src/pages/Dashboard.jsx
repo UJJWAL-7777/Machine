@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
     const [todos, setTodos] = useState([]);
     const [title, setTitle] = useState("");
 
     const token = localStorage.getItem("token");
+
+    const navigate = useNavigate();
 
     //gettodos-------------------------------------------
     const getTodos = async () => {
@@ -23,7 +26,13 @@ const Dashboard = () => {
     };
 
     useEffect(() => {
+        if(!token){
+            navigate("/");
+            return;
+        }
+
         getTodos();
+        
     }, []);
 
 
@@ -43,9 +52,18 @@ const Dashboard = () => {
         getTodos();
     }
 
+    //logout ---------------------------------------
+    const logout = () => {
+        localStorage.removeItem("token");
+        navigate("/");
+    }
+
     return (
         <div>
             <h1>Todos</h1>
+            <button onClick={logout}>
+                Logout
+            </button>
 
             <input placeholder='Enter Todo' onChange={(e) => setTitle(e.target.value)}/>
             <button onClick={addTodo}>Add Todo</button>

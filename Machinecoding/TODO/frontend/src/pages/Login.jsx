@@ -1,6 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-route-dom";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
     const [email, setEmail] = useState("");
@@ -35,7 +35,7 @@ function Login() {
     return (
         <div>
             <h1>Login</h1>
-            <input placeholder="Email" onChange={(e) => setEmail(e.email.value)}/>
+            <input placeholder="Email" onChange={(e) => setEmail(e.target.value)}/>
             <input placeholder="Password" type="password" onChange={(e) => setPssword(e.target.value)}/>
             <button onClick={handleLogin}>Login</button>
         </div>
