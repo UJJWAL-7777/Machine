@@ -27,8 +27,20 @@ function Login() {
 
         }
         catch(error){
-
+            alert(error.response.data.message);
         }
-    }
+    };
+
+
+    return (
+        <div>
+            <h1>Login</h1>
+            <input placeholder="Email" onChange={(e) => setEmail(e.email.value)}/>
+            <input placeholder="Password" type="password" onChange={(e) => setPssword(e.target.value)}/>
+            <button onClick={handleLogin}>Login</button>
+        </div>
+    );
 
 }
+
+export default Login;
