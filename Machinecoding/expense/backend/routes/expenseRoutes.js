@@ -1,5 +1,5 @@
 const express = require("express");
-const router = express.router();
+const router = express.Router();
 
 const Expense = require("../models/Expense");
 
@@ -16,7 +16,7 @@ router.post("/", async(req, res) => {
 router.get("/", async( req, res) => {
     try{
         const expense = await Expense.find().sort({createdAt: -1});
-        res.json(expenses);
+        res.json(expense);
     }
     catch(err){
         res.statis(500).json({message: err.message});

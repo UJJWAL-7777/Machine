@@ -12,7 +12,13 @@ app.use(cors());
 app.use(express.json());
 
 mongoose.connect(process.env.MONGO_URI)
-.then(() => console.log("MongoDB Connected"))
+.then(() => {
+    console.log("MongoDB Connected");
+
+    app.listen(PORT, () => {
+        console.log(`Server Running On Port ${PORT}`);
+    });
+})
 .catch(err => console.log(err));
 
 app.use("/api/expenses", require("./routes/expenseRoutes"));
