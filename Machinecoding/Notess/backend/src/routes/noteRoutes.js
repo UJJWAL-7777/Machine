@@ -9,7 +9,7 @@ const {
     deleteNote
 } = require("../controllers/noteController");
 
-const validateNote = require("../middleware/validateNote");
+const validateNote = require("../middleware/authMiddleware");
 
 router.post("/", validateNote, createNote);
 
