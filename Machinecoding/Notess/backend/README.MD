@@ -65,3 +65,10 @@ If someone changes the payload,
 the signature becomes invalid,
 
 and the server rejects the token.
+
+
+
+
+In one sentence
+
+JWT tells the server who you are on every request without asking for your email and password again. It provides a secure way to authenticate users for protected resources.

@@ -1,11 +1,11 @@
 const express = require("express");
 const router = express.Router();
 
-const {registerUser} = require("../controllers/authController");
+const {registerUser, loginUser} = require("../controllers/authController");
 
 
 router.post("/register", registerUser);   //Instead of app.post(...).... we use router.post(...)..... because all auth routes stay together....
-
+router.post("/login", loginUser);
 
 
 
