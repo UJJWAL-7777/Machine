@@ -29,6 +29,7 @@ const noteSchema = new mongoose.Schema(
         isArchived: {
             type: Boolean,
             default: false
+            
         },
 
         user: {
