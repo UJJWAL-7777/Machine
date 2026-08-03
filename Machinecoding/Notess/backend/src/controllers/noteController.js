@@ -78,4 +78,75 @@ const getNoteById = async(req, res) => {
 }
 
 
-module.exports = {createNote, getNotes, getNoteById};
+//UPDATE NOTE USNG PUT METHOD --------------------------------------
+const updateNote = async(req, res) => {
+    try{
+        const note = await Note.findById(req.params.id);
+
+        if(!note){
+            return res.status(404).json({
+                message: "Note not found"
+            });
+        }
+
+        if(note.user.toString() !== req.user._id.toString()){
+            return res.status(403).json({
+                message: "Access denied"
+            });
+        }
+
+        note.title = req.body.title || note.title;              // it helps in the parital updates..if the ield isn't provided, it's existing value is preserved-----
+        note.content = req.body.content || note.content;
+        note.tags = req.body.tags || note.tags;   
+
+        note.isPinned !== undefined
+            ? req.body.isPinned
+            : note.isPinned;
+
+        const updatedNote = await note.save();
+        
+        res.status(200).json(updatedNote)
+    }
+
+    catch(error) {
+        res.status(500).json({
+            message: err.message
+        })
+    }
+}
+
+
+
+//DELETE NOTE ---------------------------------------------------
+const deleteNode = async (req, res) => {
+    try{
+        const note = await Note.findById(req.params.id);
+
+        if(!note) {
+            return res.status(404).json({
+                message: "Note not found"
+            });
+        }
+
+        if(note.user.toString() !== req.user._id.toString()){
+            return res.status(403).json({
+                message:"Access denied"
+            });
+        }
+
+        await note.deleteOne();
+
+        res.status(200).json({
+            message: "Note deleted successfully"
+        });
+    }
+    catch(error) {
+        res.status(500).json({
+            message: error.message
+        });
+    }
+
+}
+
+
+module.exports = {createNote, getNotes, getNoteById, updateNote, deleteNode};
