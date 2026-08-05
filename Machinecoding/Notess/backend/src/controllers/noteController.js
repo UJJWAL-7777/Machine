@@ -149,4 +149,91 @@ const deleteNode = async (req, res) => {
 }
 
 
-module.exports = {createNote, getNotes, getNoteById, updateNote, deleteNode};
+
+//search notes ----------------------------------------------------
+const searchNotes = async( req, res) => {
+    try{
+        const {query} = req.query;
+        
+        if(!query) {
+            return res.status(400).json({
+                message: "Search query is required"
+            });
+        }
+
+        const notes = await Note.find({
+            user: req.user._id,
+            $or : [                         //$or MEANS MATCHES if any condition is true
+                {
+                    title: {
+                        $regex: query,
+                        $options: "i"
+                    }
+                },
+                {
+                    content: {
+                        $regex: query,
+                        $options: "i"
+                    }
+                },
+                {
+                    content: {
+                        $regex: query,
+                        $options: "i"
+                    }
+                }
+            ]
+        }).sort({
+            createdAt: -1
+        });
+
+        res.status(200).json(notes);
+    }
+
+    catch(error) {
+        res.status(500).json({
+            message: error.message
+        });
+    }
+};
+
+
+
+//toggle PinNotes ----------------------------------------------------
+const togglePinNote = async (req, res) => {
+        try{
+            const note = await Note.findById(req.params.id);
+        
+            if(!note) {
+                return res.status(404).json({
+                    message: "Note not found"
+                });
+            }
+        
+            if(note.user.toString() !== req.user._id.toString()){
+                return res.status(403).json({
+                    message: "Access Denied"
+                });
+            }
+        
+            note.isPinned = !note.isPinned;
+        
+            await note.save();
+        
+            res.status(200).json({
+                message: note.isPinned
+                ? "Note pinned successfully"
+                : "Note unpinned successfully",
+                note
+            });
+        }
+        catch(error) {
+            res.status(500).json({
+                message: error.messsage
+            });
+        }
+}
+
+
+
+module.exports = {createNote, getNotes, getNoteById, updateNote, deleteNode, searchNotes, togglePinNote};
