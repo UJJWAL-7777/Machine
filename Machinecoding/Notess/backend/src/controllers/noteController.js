@@ -30,22 +30,61 @@ const createNote = async(req, res) => {
 
 
 //GET NOTES----------------------------------------
-const getNotes = async(req, res) => {
+// const getNotes = async(req, res) => {
+//     try{
+//         const notes = await Note.find({
+//             user: req.user._id
+//         }).sort({
+//             createdAt: -1
+//         });
+
+//         res.status(200).json(notes);
+//     }
+//     catch(error) {
+//         res.status(500).json({
+//             message: error.message
+//         });
+//     }
+// };
+
+// ---------------------------------------------------------
+const getNotes = async(req, res) => {      //PAGINATION IS USED HERE - ------------------------------------
     try{
-        const notes = await Note.find({
-            user: req.user._id
-        }).sort({
-            createdAt: -1
+
+        const page = Number(req.query.page) || 1;
+        const limit = Number(req.query.limit) || 10;
+
+        const skip = (page - 1) * limit;
+
+        const totalNotes = await Note.countDocuments({
+            user: req.user._id,
+            isArchived: false
         });
 
-        res.status(200).json(notes);
+        const notes = await Note.find({
+            user: req.user._id,
+            isArchived: false
+        })
+        .sort({
+            createdAt: - 1
+        })
+        .skip(skip)
+        .limit(limit);
+
+        res.status(200).json({
+            totalNotes,
+            currentPage: page,
+            totalPages: Math.ceil(totalNotes/limit),
+            notes
+        });
     }
     catch(error) {
         res.status(500).json({
             message: error.message
         });
     }
-};
+}
+
 
 
 //get notes by id ------------------------------------------
@@ -236,4 +275,61 @@ const togglePinNote = async (req, res) => {
 
 
 
-module.exports = {createNote, getNotes, getNoteById, updateNote, deleteNode, searchNotes, togglePinNote};
+//isArchived --------------------------------------------------
+const toggleArchiveNote = async( req, res) => {
+    try{
+
+        const note = await Note.findById(req.params.id);
+
+        if(!note) {
+            return res.status(404).json({
+                message: "Access Denied"
+            });
+        }
+
+        note.isArchived = !note.isArchived;
+
+        await note.save();
+
+        res.status(200).json({
+            message: note.isArchived
+                ? "Note archived successfully"
+                : "Note restored Successfully",
+
+            note
+        });
+    }
+    catch(error) {
+        res.status(500).json({
+            message: error.message
+        })
+    }
+}
+
+
+
+
+//get notesByTag -------------------------------------------------------------
+const getNotesByTag = async(req, res) =>{
+    try{
+        const {tag} = req.params;
+
+        const notes = await Note.find({
+            user: req.user._id,
+            isArchived: false,
+            tags: tag
+        }).sort({
+            createdAt: -1
+        });
+
+        res.status(200).json(notes);
+    }
+    catch(error){
+        res.status(500).json({
+            message: error.message
+        });
+    }
+}
+
+
+module.exports = {createNote, getNotes, getNoteById, updateNote, deleteNode, searchNotes, togglePinNote, toggleArchiveNote, getNotesByTag};
