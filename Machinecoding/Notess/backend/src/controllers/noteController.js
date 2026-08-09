@@ -1,15 +1,15 @@
 const Note = require("../models/Note");
 
 //CREATE NOTES ------------------------------------
-const createNote = async(req, res) => {
+const createNote = async(req, res, next) => {
     try{
         const{title, content, tags} = req.body;
 
-        if(!title || !content){
-            return res.status(400).json({
-                message: "Title and content are required"
-            });
-        }
+        // if(!title || !content){                              //done this part in validator folder part 
+        //     return res.status(400).json({
+        //         message: "Title and content are required"
+        //     });
+        // }
 
         const note = await Note.create({
             title,
@@ -19,12 +19,12 @@ const createNote = async(req, res) => {
         });
 
         res.status(201).json(note);
-
     }
     catch(error) {
-        res.status(500).json({
-            message: error.message
-        });
+        // res.status(500).json({
+        //     message: error.message
+        // });
+        next(error);
     }
 };
 

@@ -2,9 +2,11 @@ const express = require("express");
 const router = express.Router();
 
 const {createNote, getNotes, getNoteById, updateNote, deleteNode, searchNotes, togglePinNote, toggleArchiveNote, getNotesByTag} = require("../controllers/noteController");
+const {createNoteValidator} = require("../validators/noteValidator");
 const {protect} = require("../middleware/authMiddleware");
 
 
+router.post("/", createNoteValidator, protect, createNote);
 
 router.post("/", protect, createNote);
 router.get("/", protect, getNotes);
