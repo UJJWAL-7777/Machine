@@ -72,3 +72,47 @@ and the server rejects the token.
 In one sentence
 
 JWT tells the server who you are on every request without asking for your email and password again. It provides a secure way to authenticate users for protected resources.
+
+
+
+
+
+DOCKER COMMANDS # Check Docker
+docker --version
+docker info
+
+# Go to backend
+cd C:\WEBpractice\Machinecoding\Notess\backend
+
+# Build image
+docker build -t notes-backend .
+
+# Check images
+docker images
+
+# Run manually
+docker run --env-file .env -p 5000:5000 notes-backend
+
+# Go to project root
+cd ..
+# or:
+cd C:\WEBpractice\Machinecoding\Notess
+
+# Start Compose
+docker compose up --build
+
+# In another terminal
+docker compose ps
+
+# Check containers
+docker ps
+
+# Logs
+docker compose logs backend
+docker compose logs mongodb
+
+# Volumes
+docker volume ls
+
+# Stop
+docker compose down
