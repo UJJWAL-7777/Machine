@@ -32,6 +32,6 @@ app.get("/", (req, res) => {
     });
 });
 
-app.use(errorHandler);    //using the global error handler part ------
+app.use(errorHandler);            //using the global error handler part ------
 
 module.exports = app;
