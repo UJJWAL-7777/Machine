@@ -15,6 +15,8 @@ const generateAccessToken = (user) => {
     );
 };
 
+
+
 const generateRefreshToken = () => {
     return crypto.randomBytes(64).toString("hex");
 };
